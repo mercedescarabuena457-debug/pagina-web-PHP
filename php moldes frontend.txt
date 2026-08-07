@@ -1,0 +1,347 @@
+procedimiento de verificacion: "componentes frontend con PHP-moldespro"
+usamos vs Code+ XAMP+ Navegador
+crear proyecto
+c:xampp/htdocs/moldespro-frontend
+verificacion de la definicion de componentes, objetivo:validar cada componente cumpla:reutilizable,recibe datos,devuelve HTML
+ESTRUCTURA DE CARPETAS
+[moldespro-frontend]
+├── /componentes          <- [VERIFICAR] Carpeta existe
+│   ├── header.php        <- [VERIFICAR] Componente Layout
+│   ├── formularioMolde.php <- [VERIFICAR] Componente Form
+│   └── tablaMoldes.php   <- [VERIFICAR] Componente Tabla
+├── /assets
+│   └── style.css
+├── index.php             <- [VERIFICAR] Página que usa componentes
+└── guardarMolde.php      <- [VERIFICAR] Lógica Backend
+2.Estructura interna de cada componente
+abre componentes/formularioMolde.php y verifica:
+<?php
+// [VERIFICAR 1] ¿Tiene función con nombre claro?
+function renderFormularioMolde($categorias = []) { // $categorias = "props"
+
+// [VERIFICAR 2] ¿Recibe parámetros? No debe consultar BD aquí
+?>
+    <form> 
+        <?php foreach($categorias as $cat): ?> <!-- [VERIFICAR 3] ¿Usa los datos recibidos? -->
+            <option><?php echo $cat; ?></option>
+        <?php endforeach; ?>
+    </form>
+<?php 
+}
+// [VERIFICAR 4] ¿Cierra la función?
+?>
+verificacion del funcionamiento del navegador
+checklist3:prueba de integracion
+crea index.php para probar
+<?php
+include 'componentes/header.php'; // [VERIFICAR 1] ¿Se incluye sin error?
+include 'componentes/formularioMolde.php';
+
+$categoriasPrueba = ['Camisa', 'Pantalon']; // [VERIFICAR 2] Datos de prueba
+
+renderHeader("Prueba Componentes"); // [VERIFICAR 3] ¿Se ejecuta la función?
+renderFormularioMolde($categoriasPrueba); // [VERIFICAR 4] ¿Pinta las opciones?
+?>
+</body></html>
+procedimiento de prueba en vscode:
+iniciaXAMPP>Apache>Start
+2.abrir chrome: http://localhost/moldespro-frontend/
+verificacion de conexion con backend php 
+ahora comprobamos que el componente envie datos a php
+checlist 4:envio de datos del componente
+en el componente la accion debe apuntar a un php 
+<form action="guardarMolde.php" method="post">
+    2.crea guardarMolde.php para verificar:
+        <?php
+    // [VERIFICAR 1] ¿Llegan los datos?
+    var_dump($_POST); // Imprime todo lo que envió el form
+    
+    // [VERIFICAR 2] ¿Capturo cada campo?
+    $categoria = $_POST['categoria'] ?? '';
+    $ancho = $_POST['ancho'] ?? 0;
+    
+    echo "Recibí: Categoria = $categoria, Ancho = $ancho";
+    
+    // [VERIFICAR 3] Aquí iría tu $dao->guardar()
+    ?>
+    <a href="index.php">Volver</a>
+    3.prueba:llena el form y guardar
+    verificar:
+        4.verificacion de reutilizacion -regla de oro 
+        un componente es bueno si se usa 2 veces sin copiar codigo
+        checklist 5: prueba de reutilizacion
+        Usa tablaMoldes.php en 2 paginas distintas:
+        moldes.php-muestra ultimos(10);
+        <?php 
+$moldes = $dao->listarUltimos(10); // Datos 1
+renderTablaMoldes($moldes); 
+?>
+reportes.php-muestra todos 
+<?php 
+$moldes = $dao->listarTodos(); // Datos 2
+renderTablaMoldes($moldes); 
+?>
+verificar:con el mismo componente 2 tablas distintas 
+verificacion CHECKLIST.MD para vs code 
+crear archivo en raiz:c:/xampp/htdocs/moldespro-frontend/verificacion checklist.md 
+# CHECKLIST DE VERIFICACIÓN - COMPONENTES FRONTEND PHP
+*Proyecto:* Software de Moldes de Confección - MoldesPro  
+*Fecha:* 28/07/2026  
+*Responsable:* [Tu Nombre]
+
+## 1. VERIFICACIÓN DE ESTRUCTURA
+- [ ] 1.1 Existe carpeta /componentes
+- [ ] 1.2 Existe archivo componentes/header.php
+- [ ] 1.3 Existe archivo componentes/formularioMolde.php
+- [ ] 1.4 Existe archivo componentes/tablaMoldes.php
+- [ ] 1.5 Existe archivo assets/style.css
+
+## 2. VERIFICACIÓN DE DEFINICIÓN DE COMPONENTES
+### Componente: header.php
+- [ ] 2.1 Tiene función renderHeader($titulo)
+- [ ] 2.2 No tiene consultas a BD
+- [ ] 2.3 Solo devuelve HTML + CSS
+
+### Componente: formularioMolde.php
+- [ ] 2.4 Tiene función renderFormularioMolde($datos)
+- [ ] 2.5 Recibe parámetros por función
+- [ ] 2.6 Usa foreach para pintar datos dinámicos
+- [ ] 2.7 El action apunta a guardarMolde.php
+
+### Componente: tablaMoldes.php
+- [ ] 2.8 Tiene función renderTablaMoldes($moldes)
+- [ ] 2.9 Valida si el array viene vacío
+- [ ] 2.10 Se puede reutilizar en 2 páginas distintas
+
+## 3. VERIFICACIÓN DE FUNCIONAMIENTO
+- [ ] 3.1 XAMPP Apache está corriendo
+- [ ] 3.2 Al abrir http://localhost/moldespro-frontend/ carga sin errores
+- [ ] 3.3 Se visualiza el Header
+- [ ] 3.4 Se visualiza el Formulario con las categorías
+- [ ] 3.5 Se visualiza la Tabla
+
+## 4. VERIFICACIÓN DE COMUNICACIÓN BACKEND
+- [ ] 4.1 Al enviar el form, llega a guardarMolde.php
+- [ ] 4.2 var_dump($_POST) muestra los datos
+- [ ] 4.3 Los datos se guardan en la BD MySQL
+
+## 5. VERIFICACIÓN DE REUTILIZACIÓN
+- [ ] 5.1 renderTablaMoldes() se usa en index.php
+- [ ] 5.2 renderTablaMoldes() se usa en reportes.php
+- [ ] 5.3 Cambiar 1 línea en el componente afecta a las 2 páginas
+
+## OBSERVACIONES:
+[Escribe aquí los errores encontrados]
+
+## CONCLUSIÓN:
+[ ] APROBADO  [ ] APROBADO CON OBSERVACIONES  [ ] RECHAZADO
+copia cada bloque  en su archivo dentro de <c:> 1.componentes/header.php-componente layout
+<xampp>
+<htdocs>
+<moldespro-frontend></moldespro-frontend>
+<?php
+function renderHeader($titulo = "MoldesPro") {
+    // Iniciar sesión para poder usar $_SESSION en todo el sitio
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $titulo; ?></title>
+    <link rel="stylesheet" href="/moldespro-frontend/assets/style.css">
+</head>
+<body>
+<header class="navbar">
+    <div class="nav-logo"><?php echo $titulo; ?></div>
+    <nav>
+        <a href="/moldespro-frontend/index.php">Inicio</a> | 
+        <a href="/moldespro-frontend/reportes.php">Reportes</a> | 
+        <a href="#">Salir</a>
+    </nav>
+</header>
+<main class="contenido">
+<?php 
+} 
+?>
+2.componentes/formularioMolde.php-componente form
+<?php
+function renderFormularioMolde($categorias = []) {
+?>
+<div class="form-container">
+    <h2>Crear Nuevo Molde</h2>
+    <form action="/moldespro-frontend/guardarMolde.php" method="post">
+        <label>Categoría:</label>
+        <select name="categoria" required>
+            <?php foreach($categorias as $cat): ?>
+                <option value="<?php echo $cat; ?>"><?php echo $cat; ?></option>
+            <?php endforeach; ?>
+        </select>
+
+        <label>Nombre de la Pieza:</label>
+        <select name="nombre_pieza" required>
+            <option value="Delantero">Delantero</option>
+            <option value="Trasero">Trasero</option>
+            <option value="Manga">Manga</option>
+        </select>
+
+        <label>Género:</label>
+        <select name="genero">
+            <option value="Mujer">Mujer</option>
+            <option value="Hombre">Hombre</option>
+        </select>
+
+        <label>Ancho Base (cm):</label>
+        <input type="number" name="ancho" step="0.1" required placeholder="Ej: 40.5">
+
+        <label>Alto Base (cm):</label>
+        <input type="number" name="alto" step="0.1" required placeholder="Ej: 60.0">
+
+        <button type="submit">Guardar Molde</button>
+    </form>
+</div>
+<?php 
+}
+?>
+3.componentes/tablamoldes.php-componente tabla reutilizable
+<?php
+function renderTablaMoldes($moldes = []) {
+?>
+<div class="tabla-container">
+    <h2>Últimos Moldes Registrados</h2>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pieza</th>
+                <th>Categoría</th>
+                <th>Ancho</th>
+                <th>Alto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if(empty($moldes)): ?>
+                <tr><td colspan="5" class="sin-datos">No hay moldes registrados</td></tr>
+            <?php else: ?>
+                <?php foreach($moldes as $m): ?>
+                <tr>
+                    <td><?php echo $m['id']; ?></td>
+                    <td><?php echo $m['nombre_pieza']; ?></td>
+                    <td><?php echo $m['categoria']; ?></td>
+                    <td><?php echo $m['ancho']; ?> cm</td>
+                    <td><?php echo $m['alto']; ?> cm</td>
+                </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<?php 
+}
+?>
+4.componentes /alerta.php- componente para el taller
+<?php
+function renderAlerta($tipo, $mensaje) { // $tipo = success, error, warning
+    $clase = "alerta-$tipo";
+?>
+    <div class="alerta <?php echo $clase; ?>">
+        <?php echo $mensaje; ?>
+    </div>
+<?php 
+}
+?>
+5.assets/style.css-estilos de los componenetes
+body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
+.navbar { background: #007bff; color: white; padding: 1rem; display: flex; justify-content: space-between; }
+.navbar a { color: white; text-decoration: none; }
+.contenido { padding: 2rem; }
+.form-container, .tabla-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+.form-container label { display: block; margin-top: 1rem; font-weight: bold; }
+.form-container input, .form-container select { width: 100%; padding: 0.6rem; margin-top: 0.3rem; border: 1px solid #ccc; border-radius: 4px; }
+.form-container button { width: 100%; padding: 0.8rem; margin-top: 1.5rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla th, .tabla td { border: 1px solid #ddd; padding: 0.8rem; text-align: left; }
+.tabla th { background: #007bff; color: white; }
+.sin-datos { text-align: center; color: #888; }
+.alerta { padding: 1rem; margin-bottom: 1rem; border-radius: 4px; }
+.alerta-success { background: #d4edda; color: #155724; }
+.alerta-error { background: #f8d7da; color: #721c24; }
+6.index.php-pagina principal que usalos componenetes
+<?php
+include 'componentes/header.php';
+include 'componentes/formularioMolde.php';
+include 'componentes/tablaMoldes.php';
+include 'componentes/alerta.php';
+
+// DATOS DE PRUEBA. Aquí iría tu $dao->listar()
+$moldesPrueba = [
+    ['id' => 1, 'nombre_pieza' => 'Delantero', 'categoria' => 'Camisa', 'ancho' => 40.5, 'alto' => 60.0],
+    ['id' => 2, 'nombre_pieza' => 'Manga', 'categoria' => 'Camisa', 'ancho' => 20.0, 'alto' => 50.0],
+];
+$categorias = ['Camisa', 'Pantalon', 'Chaqueta'];
+
+renderHeader("Panel de Moldes");
+
+// Mostrar alerta si viene por URL: index.php?msg=ok
+if(isset($_GET['msg']) && $_GET['msg'] == 'ok'){
+    renderAlerta('success', 'Molde guardado correctamente');
+}
+
+renderFormularioMolde($categorias); // Uso 1 del componente
+renderTablaMoldes($moldesPrueba);   // Uso 2 del componente
+
+echo "</main></body></html>";
+?>
+7.guardarmolde.php-para verificar que recibe datos 
+<?php
+include 'componentes/header.php';
+include 'componentes/alerta.php';
+
+renderHeader("Guardando...");
+
+// VERIFICACIÓN: Imprimir lo que llegó
+echo "<pre>";
+echo "DATOS RECIBIDOS POR POST:\n";
+print_r($_POST);
+echo "</pre>";
+
+// Aquí iría: $dao->guardar($_POST);
+
+renderAlerta('success', 'Datos recibidos correctamente. Aquí guardarías en BD.');
+echo '<a href="/moldespro-frontend/index.php?msg=ok">Volver al inicio</a>';
+
+echo "</main></body></html>";
+?>
+8.reportes.php-para verificar reutilizacion
+<?php
+include 'componentes/header.php';
+include 'componentes/tablaMoldes.php';
+
+// DATOS DIFERENTES para probar reutilización
+$moldesTodos = [
+    ['id' => 1, 'nombre_pieza' => 'Delantero', 'categoria' => 'Camisa', 'ancho' => 40.5, 'alto' => 60.0],
+    ['id' => 2, 'nombre_pieza' => 'Trasero', 'categoria' => 'Pantalon', 'ancho' => 45.0, 'alto' => 90.0],
+    ['id' => 3, 'nombre_pieza' => 'Manga', 'categoria' => 'Chaqueta', 'ancho' => 25.0, 'alto' => 55.0],
+];
+
+renderHeader("Reportes de Moldes");
+echo "<h1>Reporte General</h1>";
+renderTablaMoldes($moldesTodos); // Mismo componente, datos distintos
+
+echo "</main></body></html>";
+?>
+comandos finales para subir a github
+1. Abre VS Code y abre la carpeta del proyecto: c:/xampp/htdocs/moldespro-frontend 
+git add .
+git commit -m "Agrega 4 componentes + CSS + paginas de prueba"
+git push
+para probar
+1.inicia <xampp></xampp>
+2.abre:http:/localhost/moldespro-frontend/index.php
+3.prueba:http://localhost/moldespro-frontend/reportes.php 
+4.marca el verificacion checlist.md como completado
+link de github:http://github.com/mercedes/moldespro-frontend-php 
+
