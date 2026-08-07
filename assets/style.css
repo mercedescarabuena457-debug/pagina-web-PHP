@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+}
+
+.navbar {
+    background: #333;
+    color: #fff;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    font-weight: bold;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 16px;
+}
+
+.contenido {
+    max-width: 1000px;
+    margin: 24px auto;
+    padding: 0 16px 48px;
+}
+
+.form-container,
+.table-container,
+.resultado-container {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.form-container h2,
+.table-container h2,
+.resultado-container h2 {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: 600;
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button,
+.link-button {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 10px 18px;
+    background: #007acc;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover,
+.link-button:hover {
+    background: #005fa3;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background: #f0f0f0;
+}
+
+pre {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 14px;
+    overflow-x: auto;
+}
